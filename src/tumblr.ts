@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosInstance, AxiosResponse } from "axios";
 import addOAuthInterceptor, { OAuthInterceptorConfig } from "axios-oauth-1.0a";
 
 export interface Method {
@@ -137,28 +137,18 @@ export class TumblrClient {
     }
   }
 
-  private concatParams(params?: object, config?: AxiosRequestConfig): AxiosRequestConfig {
-    if (!config) { 
-      config = {} as AxiosRequestConfig; 
-    }
-
-    if (params) { 
-      config.params = Object.assign(config.params, params); 
-    }
-
-    return config;
+  public async makePostRequest(apiPath: string, data: any) {
+    return this.client.post(apiPath, JSON.stringify(data), { 
+      headers: {'Content-Type': 'application/json'}
+    });
   }
 
-  public async makePostRequest(apiPath: string, data: AxiosRequestConfig, params?: object, config?: AxiosRequestConfig) {
-    return this.client.post(apiPath, data, this.concatParams(params, config));
-  }
-
-  public async makeGetRequest(apiPath: string, params?: object, config?: AxiosRequestConfig) {
-    return this.client.get(apiPath, this.concatParams(params, config));
+  public async makeGetRequest(apiPath: string, params?: object) {
+    return this.client.get(apiPath, { params });
   }
 
   public async getBlogInfo(): Promise<AxiosResponse> {
-    return this.makeGetRequest(Get.blogInfo, { params: { api_key: this.key } })
+    return this.makeGetRequest(Get.blogInfo, { api_key: this.key })
   }
 
   public async getBlogAvatar(params: object, avatarSize: number): Promise<AxiosResponse> {
@@ -178,7 +168,7 @@ export class TumblrClient {
     return this.makeGetRequest(Get.blogPosts + `${postType}`);
   }
 
-  public async createTextPost(params: TextPostParams): Promise<AxiosResponse> {
-    return this.makePostRequest(Post.createPost, { data: params });
+  public async createTextPost(textPost: TextPost): Promise<AxiosResponse> {
+    return this.makePostRequest(Post.createPost, textPost);
   }
 }
