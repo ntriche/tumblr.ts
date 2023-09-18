@@ -33,8 +33,6 @@ describe('tumblr.ts', function() {
     client.createTextPost(params).then((response: AxiosResponse) => {
       expect(response.data.meta.status).toBe(201);
       expect(response.data.meta.msg).toBe("Created");
-      console.log(response.data.meta);
-      console.log(response.data.response);
       done();
     })
   })
