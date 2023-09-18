@@ -50,8 +50,7 @@ export interface OAuthCredentials {
 
 export interface TumblrClientOptions {
   credentials?: OAuthCredentials,
-  baseURL?: string,
-  returnPromises?: boolean,
+  baseURL?: string
 }
 
 export interface TextPostParams {
