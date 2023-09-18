@@ -45,17 +45,12 @@ export interface OAuthCredentials {
   consumerKey: string,
   consumerSecret: string,
   token: string,
-  tokenSecret: string,
+  tokenSecret: string
 }
 
 export interface TumblrClientOptions {
   credentials?: OAuthCredentials,
   baseURL?: string
-}
-
-export interface TextPostParams {
-  title?: string,
-  body: string,
 }
 
 export enum BlogPostTypes {
@@ -68,6 +63,24 @@ export enum BlogPostTypes {
   Photo = "photo",
   Chat = "chat"
 }
+
+export interface LegacyPostFields {
+  type: BlogPostTypes,
+  state?: "published" | "draft" | "queue" | "private",
+  tags?: string,
+  tweet?: string,
+  date?: string
+  format?: 'html' | 'markdown',
+  slug?: string,
+  native_inline_images?: boolean
+}
+
+export interface TextPost {
+  title?: string,
+  body: string
+}
+
+export type LegacyTextPost = LegacyPostFields & TextPost;
 
 const CLIENT_VERSION: string = '0.0.1';
 const API_BASE_URL: string = 'https://api.tumblr.com'; // deliberately no trailing slash

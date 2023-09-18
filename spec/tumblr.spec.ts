@@ -1,6 +1,6 @@
 import "jasmine";
 import { AxiosResponse } from "axios";
-import { TextPostParams, TumblrClient, TumblrClientOptions } from "../src/tumblr";
+import { TextPost, TumblrClient, TumblrClientOptions } from "../src/tumblr";
 import { CONSUMER_KEY, CONSUMER_SECRET, TOKEN, TOKEN_SECRET } from "../env";
 
 const blog: string = 'hfht-vox-pop.tumblr.com';
@@ -25,13 +25,13 @@ describe('tumblr.ts', function() {
   });
 
   it('should create a text post', (done) => {
-    const params: TextPostParams = {
-      title: "wassup",
+    const params: TextPost = {
+      title: "what's up gamers",
       body: "hows it going",
     }
 
     client.createTextPost(params).then((response: AxiosResponse) => {
-      expect(response.data.meta.status).toBe(200);
+      expect(response.data.meta.status).toBe(201);
       expect(response.data.meta.msg).toBe("Created");
       console.log(response.data.meta);
       console.log(response.data.response);
