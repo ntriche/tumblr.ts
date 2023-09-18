@@ -78,31 +78,29 @@ export class TumblrClient {
   private readonly baseURL: string = API_BASE_URL;
   private readonly credentials: OAuthCredentials | undefined = undefined;
   private readonly key: string = '';
-  private readonly oauth_options: OAuthInterceptorConfig | undefined = undefined;
 
   private readonly instance: AxiosInstance;
 
   constructor(blogIdentifier: string, options?: TumblrClientOptions) {
     this.blogIdentifier = blogIdentifier;
-    if (!!options) {
-      if (!!options.baseURL) {
-        // baseURL should maybe not be optional, because if it is not supplied, then the axios instance is probably useless
-        this.baseURL = options.baseURL;
-      }
-      if (!!options.credentials) {
-        this.credentials = options.credentials;
-        this.key = this.credentials.consumerKey;
+    if (options?.baseURL) {
+      this.baseURL = options.baseURL;
+    }
 
-        this.oauth_options = {
-          algorithm: 'HMAC-SHA1',
-          includeBodyHash: 'auto',
-          key: this.credentials?.consumerKey,
-          secret: this.credentials?.consumerSecret,
-          token: this.credentials?.token,
-          tokenSecret: this.credentials?.tokenSecret,
-          callback: '',
-          verifier: '',
-        }
+    let oauth_options: OAuthInterceptorConfig | undefined;
+    if (options?.credentials) {
+      this.credentials = options.credentials;
+      this.key = this.credentials.consumerKey;
+
+      oauth_options = {
+        algorithm: 'HMAC-SHA1',
+        includeBodyHash: 'auto',
+        key: this.credentials?.consumerKey,
+        secret: this.credentials?.consumerSecret,
+        token: this.credentials?.token,
+        tokenSecret: this.credentials?.tokenSecret,
+        callback: '',
+        verifier: '',
       }
     }
 
@@ -119,16 +117,22 @@ export class TumblrClient {
       return x;
     });
 
-    if (!!this.oauth_options) {
-      addOAuthInterceptor(this.instance, this.oauth_options);
+    if (oauth_options) {
+      addOAuthInterceptor(this.instance, oauth_options);
     }
 
     // TODO: modify path for API_METHODS here
   }
 
   private concatParams(params?: object, config?: AxiosRequestConfig): AxiosRequestConfig {
-    if (!!!config) { config = {} as AxiosRequestConfig; }
-    if (!!params) { config.params = Object.assign(config.params, params); }
+    if (!config) { 
+      config = {} as AxiosRequestConfig; 
+    }
+
+    if (params) { 
+      config.params = Object.assign(config.params, params); 
+    }
+
     return config;
   }
 
