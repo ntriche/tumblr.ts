@@ -1,6 +1,46 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import addOAuthInterceptor, { OAuthInterceptorConfig } from "axios-oauth-1.0a";
 
+export interface Method {
+  [key: string]: string;
+}
+
+export const Get: Method = {
+  blogInfo: '/v2/blog/:blogIdentifier/info',
+  blogAvatar: '/v2/blog/:blogIdentifier/avatar/',
+  blogLikes: '/v2/blog/:blogIdentifier/likes',
+  blogFollowers: '/v2/blog/:blogIdentifier/followers',
+  blogPosts: '/v2/blog/:blogIdentifier/posts/:type',
+  blogQueue: '/v2/blog/:blogIdentifier/posts/queue',
+  blogDrafts: '/v2/blog/:blogIdentifier/posts/draft',
+  blogSubmissions: '/v2/blog/:blogIdentifier/posts/submission',
+  userInfo: '/v2/user/info',
+  userDashboard: '/v2/user/dashboard',
+  userFollowing: '/v2/user/following',
+  userLikes: '/v2/user/likes',
+  taggedPosts: '/v2/tagged',
+}
+
+export const Post: Method = {
+  createPost: '/v2/blog/:blogIdentifier/post',
+  editPost: '/v2/blog/:blogIdentifier/post/edit',
+  reblogPost: '/v2/blog/:blogIdentifier/post/reblog',
+  deletePost: '/v2/blog/:blogIdentifier/post/delete',
+  followBlog: '/v2/user/follow',
+  unfollowBlog: '/v2/user/unfollow',
+  likePost: '/v2/user/like',
+  unlikePost: '/v2/user/unlike',
+}
+
+export interface Methods {
+  [key: string]: Method;
+}
+
+export const ApiMethods: Methods = {
+  'GET': Get,
+  'POST': Post
+}
+
 export interface OAuthCredentials {
   consumerKey: string,
   consumerSecret: string,
@@ -42,34 +82,6 @@ export class TumblrClient {
 
   private readonly instance: AxiosInstance;
 
-  private API_METHODS = {
-    GET: {
-      blogInfo: '/v2/blog/:blogIdentifier/info',
-      blogAvatar: '/v2/blog/:blogIdentifier/avatar/',
-      blogLikes: '/v2/blog/:blogIdentifier/likes',
-      blogFollowers: '/v2/blog/:blogIdentifier/followers',
-      blogPosts: '/v2/blog/:blogIdentifier/posts/:type',
-      blogQueue: '/v2/blog/:blogIdentifier/posts/queue',
-      blogDrafts: '/v2/blog/:blogIdentifier/posts/draft',
-      blogSubmissions: '/v2/blog/:blogIdentifier/posts/submission',
-      userInfo: '/v2/user/info',
-      userDashboard: '/v2/user/dashboard',
-      userFollowing: '/v2/user/following',
-      userLikes: '/v2/user/likes',
-      taggedPosts: '/v2/tagged',
-    },
-    POST: {
-      createPost: '/v2/blog/:blogIdentifier/post',
-      editPost: '/v2/blog/:blogIdentifier/post/edit',
-      reblogPost: '/v2/blog/:blogIdentifier/post/reblog',
-      deletePost: '/v2/blog/:blogIdentifier/post/delete',
-      followBlog: '/v2/user/follow',
-      unfollowBlog: '/v2/user/unfollow',
-      likePost: '/v2/user/like',
-      unlikePost: '/v2/user/unlike',
-    },
-  }
-
   constructor(blogIdentifier: string, options?: TumblrClientOptions) {
     this.blogIdentifier = blogIdentifier;
     if (!!options) {
@@ -104,7 +116,6 @@ export class TumblrClient {
     });
 
     this.instance.interceptors.request.use(x => {
-      console.log(x);
       return x;
     });
 
@@ -130,27 +141,27 @@ export class TumblrClient {
   }
 
   public async getBlogInfo(): Promise<AxiosResponse> {
-    return this.makeGetRequest(this.API_METHODS.GET.blogInfo, { params: { api_key: this.key } })
+    return this.makeGetRequest(Get.blogInfo, { params: { api_key: this.key } })
   }
 
   public async getBlogAvatar(params: object, avatarSize: number): Promise<AxiosResponse> {
-    const apiPath: string = this.API_METHODS.GET.blogAvatar + (!!avatarSize ? `/${avatarSize}` : ``);
+    const apiPath: string = Get.blogAvatar + (!!avatarSize ? `/${avatarSize}` : ``);
     return this.makeGetRequest(apiPath, params);
   }
 
   public async getBlogLikes(): Promise<AxiosResponse> {
-    return this.makeGetRequest(this.API_METHODS.GET.blogLikes, { params: { api_key: this.key } });
+    return this.makeGetRequest(Get.blogLikes, { params: { api_key: this.key } });
   }
 
   public async getBlogFollowers(): Promise<AxiosResponse> {
-    return this.makeGetRequest(this.API_METHODS.GET.blogFollowers);
+    return this.makeGetRequest(Get.blogFollowers);
   }
 
   public async getBlogPosts(postType: BlogPostTypes): Promise<AxiosResponse> {
-    return this.makeGetRequest(this.API_METHODS.GET.blogPosts + `${postType}`);
+    return this.makeGetRequest(Get.blogPosts + `${postType}`);
   }
 
   public async createTextPost(params: TextPostParams): Promise<AxiosResponse> {
-    return this.makePostRequest(this.API_METHODS.POST.createPost, { data: params });
+    return this.makePostRequest(Post.createPost, { data: params });
   }
 }
