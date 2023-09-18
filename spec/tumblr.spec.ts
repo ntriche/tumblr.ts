@@ -3,8 +3,8 @@ import { AxiosResponse } from "axios";
 import { TextPost, TumblrClient, TumblrClientOptions } from "../src/tumblr";
 import { CONSUMER_KEY, CONSUMER_SECRET, TOKEN, TOKEN_SECRET } from "../env";
 
-const blog: string = 'hfht-vox-pop.tumblr.com';
 const options: TumblrClientOptions = {
+  blogIdentifier: 'hfht-vox-pop.tumblr.com',
   credentials: {
     consumerKey: CONSUMER_KEY,
     consumerSecret: CONSUMER_SECRET,
@@ -14,7 +14,7 @@ const options: TumblrClientOptions = {
 }
 
 describe('tumblr.ts', function() {
-  const client: TumblrClient = new TumblrClient(blog, options)
+  const client: TumblrClient = new TumblrClient(options)
 
   it('should return blog info', (done) => {
     client.getBlogInfo().then((response: AxiosResponse) => {

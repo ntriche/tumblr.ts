@@ -50,7 +50,8 @@ export interface OAuthCredentials {
 
 export interface TumblrClientOptions {
   credentials?: OAuthCredentials,
-  baseURL?: string
+  blogIdentifier?: string,
+  baseURL?: string,
 }
 
 export enum BlogPostTypes {
@@ -86,17 +87,19 @@ const CLIENT_VERSION: string = '0.0.1';
 const API_BASE_URL: string = 'https://api.tumblr.com'; // deliberately no trailing slash
 
 export class TumblrClient {
-  private readonly blogIdentifier: string;
+  private readonly blogIdentifier: string = '';
   private readonly baseURL: string = API_BASE_URL;
   private readonly credentials: OAuthCredentials | undefined = undefined;
   private readonly key: string = '';
-
   private readonly client: AxiosInstance;
 
-  constructor(blogIdentifier: string, options?: TumblrClientOptions) {
-    this.blogIdentifier = blogIdentifier;
+  constructor(options?: TumblrClientOptions) {
     if (options?.baseURL) {
       this.baseURL = options.baseURL;
+    }
+
+    if (options?.blogIdentifier) {
+      this.blogIdentifier = options.blogIdentifier;
     }
 
     let oauth_options: OAuthInterceptorConfig | undefined;
