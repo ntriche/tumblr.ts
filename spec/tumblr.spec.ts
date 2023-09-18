@@ -1,7 +1,7 @@
 import "jasmine";
-import { TextPostParams, TumblrClient, TumblrClientOptions } from "../tumblr";
-import { CONSUMER_KEY, CONSUMER_SECRET, TOKEN, TOKEN_SECRET } from "../env";
 import { AxiosResponse } from "axios";
+import { TextPostParams, TumblrClient, TumblrClientOptions } from "../src/tumblr";
+import { CONSUMER_KEY, CONSUMER_SECRET, TOKEN, TOKEN_SECRET } from "../env";
 
 const blog: string = 'hfht-vox-pop.tumblr.com';
 const options: TumblrClientOptions = {
