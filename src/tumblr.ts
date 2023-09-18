@@ -79,7 +79,7 @@ export class TumblrClient {
   private readonly credentials: OAuthCredentials | undefined = undefined;
   private readonly key: string = '';
 
-  private readonly instance: AxiosInstance;
+  private readonly client: AxiosInstance;
 
   constructor(blogIdentifier: string, options?: TumblrClientOptions) {
     this.blogIdentifier = blogIdentifier;
@@ -104,7 +104,7 @@ export class TumblrClient {
       }
     }
 
-    this.instance = axios.create({
+    this.client = axios.create({
       baseURL: this.baseURL,
       maxRedirects: 0,
       timeout: 1000,
@@ -113,12 +113,8 @@ export class TumblrClient {
       }
     });
 
-    this.instance.interceptors.request.use(x => {
-      return x;
-    });
-
     if (oauth_options) {
-      addOAuthInterceptor(this.instance, oauth_options);
+      addOAuthInterceptor(this.client, oauth_options);
     }
 
     // TODO: modify path for API_METHODS here
@@ -137,11 +133,11 @@ export class TumblrClient {
   }
 
   public async makePostRequest(apiPath: string, data: AxiosRequestConfig, params?: object, config?: AxiosRequestConfig) {
-    return this.instance.post(apiPath, data, this.concatParams(params, config));
+    return this.client.post(apiPath, data, this.concatParams(params, config));
   }
 
   public async makeGetRequest(apiPath: string, params?: object, config?: AxiosRequestConfig) {
-    return this.instance.get(apiPath, this.concatParams(params, config));
+    return this.client.get(apiPath, this.concatParams(params, config));
   }
 
   public async getBlogInfo(): Promise<AxiosResponse> {
