@@ -1,7 +1,6 @@
 /node_modules/
 .vscode/*
 
-
 *.js.map
 *.js
 dist
