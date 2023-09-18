@@ -116,7 +116,12 @@ export class TumblrClient {
       addOAuthInterceptor(this.client, oauth_options);
     }
 
-    // TODO: modify path for API_METHODS here
+    for (const key in ApiMethods) {
+      const method: Method = ApiMethods[key];
+      for (const path in method) {
+        method[path] = method[path].replace(':blogIdentifier', this.blogIdentifier);
+      }
+    }
   }
 
   private concatParams(params?: object, config?: AxiosRequestConfig): AxiosRequestConfig {
