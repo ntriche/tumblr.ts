@@ -1,12 +1,12 @@
 # hfht's Tumblr API Client #
 
-A Tumblr API Client written in TypeScript meant as a more up-to-date alternative to Tumblr's own API client library, [tumblr.js](https://github.com/tumblr/tumblr.js/). Specifically, I had issues with tumblr.js and the use of promises rather than callbacks in my attempts to create a Tumblr bot.
+A Tumblr API Client written in TypeScript meant as a more up-to-date alternative to Tumblr's own API client library, [tumblr.js](https://github.com/tumblr/tumblr.js/). The creation of this library was motivated by issues I had with tumblr.js, particularly how the use of promises rather than callbacks feels like an afterthought. 
 
 ## Getting Starting ##
 
-import { TumblrClient } from "hfht-tumblr.js"
+import { TumblrClient } from "tumblr.ts"
 
-According to the Tumblr API documentation (https://www.tumblr.com/docs/en/api/v2), there is only a single method/endpoint/whatever that doesn't require any form of authorization (getting a blog avatar https://www.tumblr.com/docs/en/api/v2#avatar--retrieve-a-blog-avatar). For this reason, creating a TumblrClient object doesn't require any credentials. In practice, you're better off supplying your API key, a.k.a. consumer key, at the least. To create text posts and anything of that nature, you'll need to supply all of the credentials necessary for OAuth1 authorization. 
+According to the Tumblr API documentation (https://www.tumblr.com/docs/en/api/v2), there is only a (single endpoint)[https://www.tumblr.com/docs/en/api/v2#avatar--retrieve-a-blog-avatar] that doesn't require any form of authorization. For this reason, creating a TumblrClient object doesn't require any credentials. In practice, you're better off supplying at least your API key, a.k.a. consumer key. To create text posts and anything of that nature, you'll need to supply all of the credentials necessary for OAuth1 authorization. 
 
 ## Getting OAuth1 Credentials for your Tumblr Bot ##
 
@@ -36,7 +36,7 @@ This should display a popup that wants to know whether or not to authorize your 
 
 ## Authorizing your bot ##
 
-This part seems to be a little broken as of 2023. 
+To be determined
 
 ## Notes ##
 
