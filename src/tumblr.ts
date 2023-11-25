@@ -36,7 +36,7 @@ export interface Methods {
   [key: string]: Method;
 }
 
-export const ApiMethods: Methods = {
+export const SupportedMethods: Methods = {
   'GET': Get,
   'POST': Post
 }
@@ -132,30 +132,76 @@ export class TumblrClient {
       addOAuthInterceptor(this.client, oauth_options);
     }
 
-    for (const key in ApiMethods) {
-      const method: Method = ApiMethods[key];
-      for (const path in method) {
-        method[path] = method[path].replace(':blogIdentifier', this.blogIdentifier);
-      }
+    // for (const key in ApiMethods) {
+    //   const method: Method = ApiMethods[key];
+    //   for (const path in method) {
+    //     method[path] = method[path].replace(':blogIdentifier', this.blogIdentifier);
+    //   }
+    // }
+  }
+
+  // private createBlogApiPath(apiPath: string, blogIdentifier: string) {
+  //   return apiPath.replace(':blogIdentifier', blogIdentifier)
+  // }
+
+  private async makeHttpRequest(apiPath: string, blogIdentifier?: string, data?: object, params?: object): Promise<AxiosResponse> {
+    if (blogIdentifier !== undefined || blogIdentifier !== null) {
+      blogIdentifier = this.blogIdentifier;
+    }
+
+    if (blogIdentifier.trim() == "") {
+      throw new Error("Invalid blog identifier - either pass one in as an argument or construct a new client object");
+    }
+    
+    apiPath.replace(':blogIdentifier', blogIdentifier);
+
+    switch (method) {
+      case "GET":
+        return this.makeGetRequest(apiPath, params);
+      case "POST":
+        return this.makePostRequest(apiPath, params, data);
+      default:
+        throw new Error("Invalid HTTP method: ", method);
     }
   }
 
-  public async makePostRequest(apiPath: string, data: any) {
-    return this.client.post(apiPath, JSON.stringify(data), { 
-      headers: {'Content-Type': 'application/json'}
-    });
+  private async makePostRequest(apiPath: string, params?: object, data?: object): Promise<AxiosResponse> {
+    let string_data: string =  "";
+    if (data) {
+      string_data = JSON.stringify(data);
+    }
+    return this.client.post(
+      apiPath, 
+      string_data,
+      { params },
+      // { 
+      //   headers: {'Content-Type': 'application/json'}
+      // }
+    );
   }
 
-  public async makeGetRequest(apiPath: string, params?: object) {
-    return this.client.get(apiPath, { params });
+  private async makeGetRequest(apiPath: string, params?: object): Promise<AxiosResponse> {
+    return this.client.get(
+      apiPath,
+      { params }
+    );
   }
-
-  public async getBlogInfo(): Promise<AxiosResponse> {
+  
+  /**
+   * Gets information about a given blog
+   * 
+   * @param {string} blogIdentifier - blog name or URL
+   * @param 
+   * 
+   * @returns {Promise<AxiosResponse>} AxiosResponse object
+   */
+  public async getBlogInfo(blogIdentifier?: string): Promise<AxiosResponse> {
+    const thing = SupportedMethods['GET'];
     return this.makeGetRequest(Get.blogInfo, { api_key: this.key })
   }
 
   public async getBlogAvatar(params: object, avatarSize: number): Promise<AxiosResponse> {
-    const apiPath: string = Get.blogAvatar + (!!avatarSize ? `/${avatarSize}` : ``);
+    const apiPath: string = Get.blogAvatar + (avatarSize ? `/${avatarSize}` : ``);
     return this.makeGetRequest(apiPath, params);
   }
 
