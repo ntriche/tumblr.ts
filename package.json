@@ -11,9 +11,11 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^1.4.0",
-    "axios-oauth-1.0a": "^0.3.6"
+    "axios-oauth-1.0a": "^0.3.6",
+    "commander": "^12.1.0"
   },
   "devDependencies": {
+    "@commander-js/extra-typings": "^12.1.0",
     "@types/jasmine": "^4.3.2",
     "jasmine": "^5.0.0",
     "ts-node": "^10.9.1",
