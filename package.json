@@ -1,0 +1,22 @@
+{
+  "name": "tumblr.ts",
+  "version": "0.0.1",
+  "description": "a axios-based tumblr api client",
+  "main": "dist/src/index.js",
+  "typings": "dist/src/index.d.ts",
+  "scripts": {
+    "test": "ts-node node_modules/jasmine/bin/jasmine"
+  },
+  "author": "nate riche",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.4.0",
+    "axios-oauth-1.0a": "^0.3.6"
+  },
+  "devDependencies": {
+    "@types/jasmine": "^4.3.2",
+    "jasmine": "^5.0.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.3"
+  }
+}
