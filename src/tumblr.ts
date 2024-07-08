@@ -100,6 +100,20 @@ export class TumblrClient {
 
     if (options?.blogIdentifier) {
       this.blogIdentifier = options.blogIdentifier;
+
+      for (const key in Get) {
+        for (const path in Get) {
+          let method: string = Get[key];
+          method = method.replace(':blogIdentifier', this.blogIdentifier);
+          Get[key] = method;
+        }
+
+        for (const path in Post) {
+          let method: string = Post[key];
+          method = method.replace(':blogIdentifier', this.blogIdentifier);
+          Post[key] = method;
+        }
+      }
     }
 
     let oauth_options: OAuthInterceptorConfig | undefined;
@@ -131,52 +145,13 @@ export class TumblrClient {
     if (oauth_options) {
       addOAuthInterceptor(this.client, oauth_options);
     }
-
-    // for (const key in ApiMethods) {
-    //   const method: Method = ApiMethods[key];
-    //   for (const path in method) {
-    //     method[path] = method[path].replace(':blogIdentifier', this.blogIdentifier);
-    //   }
-    // }
-  }
-
-  // private createBlogApiPath(apiPath: string, blogIdentifier: string) {
-  //   return apiPath.replace(':blogIdentifier', blogIdentifier)
-  // }
-
-  private async makeHttpRequest(apiPath: string, blogIdentifier?: string, data?: object, params?: object): Promise<AxiosResponse> {
-    if (blogIdentifier !== undefined || blogIdentifier !== null) {
-      blogIdentifier = this.blogIdentifier;
-    }
-
-    if (blogIdentifier.trim() == "") {
-      throw new Error("Invalid blog identifier - either pass one in as an argument or construct a new client object");
-    }
-    
-    apiPath.replace(':blogIdentifier', blogIdentifier);
-
-    switch (method) {
-      case "GET":
-        return this.makeGetRequest(apiPath, params);
-      case "POST":
-        return this.makePostRequest(apiPath, params, data);
-      default:
-        throw new Error("Invalid HTTP method: ", method);
-    }
   }
 
   private async makePostRequest(apiPath: string, params?: object, data?: object): Promise<AxiosResponse> {
-    let string_data: string =  "";
-    if (data) {
-      string_data = JSON.stringify(data);
-    }
     return this.client.post(
       apiPath, 
-      string_data,
+      JSON.stringify(data),
       { params },
-      // { 
-      //   headers: {'Content-Type': 'application/json'}
-      // }
     );
   }
 
